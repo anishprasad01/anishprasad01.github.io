@@ -48,7 +48,7 @@ Level1.prototype.initialize = function () {
     gEngine.DefaultResources.setGlobalAmbientColor([1, 1, 1, 1]);
     gEngine.DefaultResources.setGlobalAmbientIntensity(1.0);
     
-    this.mUITitle = new UIText("Level 1", [400, 560], 8, 1, 2, [0.6, 0, 0, 1]);
+    this.mUITitle = new UIText("Test Level 1", [400, 560], 8, 1, 2, [0.6, 0, 0, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUITitle);
     
     this.mUIScore = new UIText("Score: 0", [400, 540], 5, 1, 2, [0, 0, 0, 1]);
