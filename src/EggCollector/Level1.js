@@ -54,17 +54,17 @@ Level1.prototype.initialize = function () {
     this.mUIScore = new UIText("Score: 0", [400, 540], 5, 1, 2, [0, 0, 0, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUIScore);
     
-    for (var i = 0; i < 10; i++) {
-        var line = new LineRenderable(20 * i - 100, 150, 20 * i - 100, -150);
-        line.setColor([0.5, 0.5, 0.5, 1]);
-        gEngine.LayerManager.addToLayer(gEngine.eLayer.eBackground, line);
-    }
-    
-    for (var i = 0; i < 7; i++) {
-        var line = new LineRenderable(-100, i * 20 - 20, 100, i * 20 - 20);
-        line.setColor([0.5, 0.5, 0.5, 1]);
-        gEngine.LayerManager.addToLayer(gEngine.eLayer.eBackground, line);
-    }
+//    for (var i = 0; i < 10; i++) {
+//        var line = new LineRenderable(20 * i - 100, 150, 20 * i - 100, -150);
+//        line.setColor([0.5, 0.5, 0.5, 1]);
+//        gEngine.LayerManager.addToLayer(gEngine.eLayer.eBackground, line);
+//    }
+//    
+//    for (var i = 0; i < 7; i++) {
+//        var line = new LineRenderable(-100, i * 20 - 20, 100, i * 20 - 20);
+//        line.setColor([0.5, 0.5, 0.5, 1]);
+//        gEngine.LayerManager.addToLayer(gEngine.eLayer.eBackground, line);
+//    }
     
     var parser = new SceneFileParser(this.kLevelFile);
     this.mCamera = parser.parseCamera();
