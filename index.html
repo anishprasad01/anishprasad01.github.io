@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Final Game Reveal Demo </title>
+        <title>Egg Collector</title>
         <link rel ="icon" type ="image/x-icon" href="./assets/favicon.png">
 
         <!-- the following says there are javascript source code contained in 
@@ -65,9 +65,6 @@
         <script type="text/javascript" src="src/Engine/Particles/ParticleGameObjectSet.js"></script>
         <script type="text/javascript" src="src/Engine/Particles/ParticleEmitter.js"></script>
         <script type="text/javascript" src="src/Engine/Particles/ParticleSystems/ParticleSystem.js"></script>
-        <script type="text/javascript" src="src/Engine/Particles/ParticleSystems/Fire.js"></script>
-        <script type="text/javascript" src="src/Engine/Particles/ParticleSystems/Smoke.js"></script>
-        <script type="text/javascript" src="src/Engine/Particles/ParticleSystems/Snow.js"></script>
         <!-- Shaders -->
         <script type="text/javascript" src="src/Engine/Shaders/SimpleShader.js"></script>
         <script type="text/javascript" src="src/Engine/Shaders/TextureShader.js"></script>
@@ -112,24 +109,38 @@
         
         <!-- Client game code -->
         <script type="text/javascript" src="src/EggCollector/Util/SceneFileParser.js"></script>
-        <script type="text/javascript" src="src/EggCollector/BirdTesting.js"></script>
         <script type="text/javascript" src="src/EggCollector/BirdTesting2.js"></script>
-        <script type="text/javascript" src="src/EggCollector/BirdTesting3.js"></script>
-        <script type="text/javascript" src="src/EggCollector/Level1.js"></script>
-        <script type="text/javascript" src="src/EggCollector/Objects/Bird.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Levels/MainMenu.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Levels/BirdCreek.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Levels/Level1.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Levels/EndLevel.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/Bird.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdState.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateNormal.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateNormalX.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateUp.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateUpX.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateDown.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateDownX.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateGround.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Bird/BirdStates/BirdStateGroundX.js"></script>
         <script type="text/javascript" src="src/EggCollector/Objects/PlayerBird.js"></script>
         <script type="text/javascript" src="src/EggCollector/Objects/EnemyBird.js"></script>
         <script type="text/javascript" src="src/EggCollector/Objects/Egg.js"></script>
-        <script type="text/javascript" src="src/EggCollector/Objects/EndLevel.js"></script>
         <script type="text/javascript" src="src/EggCollector/Objects/RenderablePlatform.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Nest.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Tree.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Branch.js"></script>
         <script type="text/javascript" src="src/EggCollector/Objects/ScreenKeyboard.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/MiniIcon.js"></script>
+        <script type="text/javascript" src="src/EggCollector/Objects/Cameras/MiniMap.js"></script>
         
         <link rel="stylesheet" type="text/css" href="LoadingIcons.css">
         <link rel="stylesheet" type="text/css" href="keyboard.css">
     </head>
 
     <body onload="
-        var myGame = new BirdTesting();
+        var myGame = new MainMenu();
         gEngine.Core.initializeEngineCore('GLCanvas', myGame);
      ">
         <div id="LoadingIconParent" style="width: 800px; height:600px;">
@@ -139,33 +150,6 @@
         <!-- this message will show only if WebGL clearing failed -->
         </canvas>
         <script type="text/javascript"> gEngine.LoadingIconConfig.setup(); </script>
-        </div>
-        <div class="key-group">
-            <div id="keyW" class="key">
-                <div class="key-text"><p>W</p></div>
-                <img class="key-image" src="extra/blank-key.png">
-                <img class="key-image-alt" src="extra/blank-key-alt.png">
-            </div>
-            <div id="keyA" class="key">
-                <div class="key-text"><p>A</p></div>
-                <img class="key-image" src="extra/blank-key.png">
-                <img class="key-image-alt" src="extra/blank-key-alt.png">
-            </div>
-            <div id="keyS" class="key">
-                <div class="key-text"><p>S</p></div>
-                <img class="key-image" src="extra/blank-key.png">
-                <img class="key-image-alt" src="extra/blank-key-alt.png">
-            </div>
-            <div id="keyD" class="key">
-                <div class="key-text"><p>D</p></div>
-                <img class="key-image" src="extra/blank-key.png">
-                <img class="key-image-alt" src="extra/blank-key-alt.png">
-            </div>
-            <div id="keySpace" class="space-key">
-                <div class="key-text"><p>SPACE</p></div>
-                <img class="key-image" src="extra/blank-space-key.png">
-                <img class="key-image-alt" src="extra/blank-space-key-alt.png">
-            </div>
         </div>
     </body>
 </html>

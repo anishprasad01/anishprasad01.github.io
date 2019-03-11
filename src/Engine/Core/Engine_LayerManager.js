@@ -27,7 +27,8 @@ gEngine.eLayer = Object.freeze({
     eShadowReceiver: 1,
     eActors: 2,
     eFront: 3,
-    eHUD: 4
+    eHUD: 4,
+    eMiniMap: 5
 });
 
 /**
@@ -53,6 +54,7 @@ gEngine.LayerManager = (function () {
         mAllLayers[gEngine.eLayer.eActors] = new GameObjectSet();
         mAllLayers[gEngine.eLayer.eFront] = new GameObjectSet();
         mAllLayers[gEngine.eLayer.eHUD] = new GameObjectSet();
+        mAllLayers[gEngine.eLayer.eMiniMap] = new GameObjectSet();
     };
     
     /**

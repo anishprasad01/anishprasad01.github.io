@@ -1,7 +1,7 @@
 "use strict";
 
-function EnemyBird(playerBird, patrolCenter, patrolSize) {
-    Bird.call(this);
+function EnemyBird(texture, playerBird, patrolCenter, patrolSize) {
+    Bird.call(this, texture, new GameObjectSet(), new GameObjectSet());
     
     this.cStunDuration = 1000;
     this.cDirections = Object.freeze({

@@ -43,6 +43,8 @@ RigidShape.prototype.getRotationLock = function() { return this.mZRotationLocked
 RigidShape.prototype.setPhysicsEnabled = function(enable) { this.mPhysicsEnabled = enable; };
 RigidShape.prototype.getPhysicsEnabled = function() { return this.mPhysicsEnabled; };
 
+RigidShape.prototype.getRigidBody = function() { return this;};
+
 /**
  * Return mInvMass
  * @memberOf RigidShape
@@ -388,4 +390,8 @@ RigidShape.prototype.resolveParticleCollision = function(aParticle, xf) {
  */
 RigidShape.prototype.setTransform = function(xf){
     this.mXform = xf;
+};
+
+RigidShape.prototype.getTransform = function() {
+    return this.mXform;
 };

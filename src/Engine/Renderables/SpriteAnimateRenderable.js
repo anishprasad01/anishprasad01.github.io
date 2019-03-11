@@ -170,6 +170,12 @@ SpriteAnimateRenderable.prototype.updateAnimation = function () {
         }
     }
 };
+
+SpriteAnimateRenderable.prototype.setCurrentElement = function(index) {
+    this.mCurrentElm = Math.floor(index);
+    this.mCurrentTick = Math.floor((index % 1) * this.mUpdateInterval);
+    this._setSpriteElement();
+};
 //--- end of Public Methods
 //
 //</editor-fold>

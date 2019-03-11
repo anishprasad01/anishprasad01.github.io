@@ -2,6 +2,7 @@
 
 function BirdTesting2() {
     this.kLevelFile = "assets/BirdTesting/BirdTesting2.xml";
+    this.kBirdTexture = "assets/Birds/bird-sketch-2.png";
     this.mUITitle = null;
     this.mRestart = false;
     this.mSwitchLevel = false;
@@ -24,12 +25,13 @@ gEngine.Core.inheritPrototype(BirdTesting2, Scene);
 
 BirdTesting2.prototype.loadScene = function () {
     gEngine.TextFileLoader.loadTextFile(this.kLevelFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
+    gEngine.Textures.loadTexture(this.kBirdTexture);
 };
 
 BirdTesting2.prototype.unloadScene = function () {
     gEngine.LayerManager.cleanUp();
     gEngine.TextFileLoader.unloadTextFile(this.kLevelFile);
-    
+    gEngine.Textures.unloadTexture(this.kBirdTexture);
     if (this.mRestart === true) {
         gEngine.Core.startScene(new BirdTesting2());
     } 
@@ -57,14 +59,14 @@ BirdTesting2.prototype.initialize = function () {
         this.mEggPhysicsObjects.addToSet(this.mPlatformSet.getObjectAt(i));
     }
     
-    this.mEggSet = parser.parseEggs();
+    this.mEggSet = parser.parseEggs(this.kBirdTexture);
     for (var i = 0; i < this.mEggSet.size(); i++) {
+        //this.mEggSet.getObjectAt(i).setDrawRigidShape(true);
         this.mEggPhysicsObjects.addToSet(this.mEggSet.getObjectAt(i));
     }
     
-    this.mBird = new PlayerBird(this.mEggSet);
-    this.mBird.setDrawRigidShape(true);
-    this.mBird.toggleDrawRenderable();
+    this.mBird = new PlayerBird(this.kBirdTexture, this.mPlatformSet, this.mEggSet);
+    //this.mBird.setDrawRigidShape(true);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mBird);
     this.mBirdPhysicsObjects.addToSet(this.mBird);
     
@@ -76,10 +78,9 @@ BirdTesting2.prototype.initialize = function () {
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mNest);
     this.mBirdPhysicsObjects.addToSet(this.mNest);
     
-    this.mTestEnemy = new EnemyBird(this.mBird, [-50, -10], [40, 30]);
+    this.mTestEnemy = new EnemyBird(this.kBirdTexture, this.mBird, [-50, -10], [40, 30]);
+    //this.mTestEnemy.setDrawRigidShape(true);
     this.mTestEnemy.getXform().setPosition(-50, -10);
-    this.mTestEnemy.setDrawRigidShape(true);
-    this.mTestEnemy.toggleDrawRenderable();
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mTestEnemy);
     this.mBirdPhysicsObjects.addToSet(this.mTestEnemy);
     
@@ -88,13 +89,13 @@ BirdTesting2.prototype.initialize = function () {
     this.bound.getXform().setSize(40, 30);
     this.bound.setColor([1.0, 1.0, 0.0, 1]);
     
-    this.mScreenKeyboard = new ScreenKeyboard([
-       gEngine.Input.keys.W,
-       gEngine.Input.keys.A,
-       gEngine.Input.keys.S,
-       gEngine.Input.keys.D,
-       gEngine.Input.keys.Space
-    ]);
+//    this.mScreenKeyboard = new ScreenKeyboard([
+//       gEngine.Input.keys.W,
+//       gEngine.Input.keys.A,
+//       gEngine.Input.keys.S,
+//       gEngine.Input.keys.D,
+//       gEngine.Input.keys.Space
+//    ]);
 };
 
 BirdTesting2.prototype.draw = function () {
@@ -120,7 +121,7 @@ BirdTesting2.prototype.update = function () {
     gEngine.LayerManager.updateAllLayers();
     gEngine.Physics.processCollision(this.mBirdPhysicsObjects, []);
     gEngine.Physics.processCollision(this.mEggPhysicsObjects, []);
-    this.mScreenKeyboard.update();
+    //this.mScreenKeyboard.update();
     
     for (var i = 0; i < this.mEggSet.size(); i++) {
         if (this.mNest.getBBox().boundCollideStatus(this.mEggSet.getObjectAt(i).getBBox()) !== 0)

@@ -21,24 +21,44 @@ SceneFileParser.prototype._getElm = function (tagElm) {
 
 SceneFileParser.prototype.parseCamera = function () {
     var camElm = this._getElm("Camera");
-    var cx = Number(camElm[0].getAttribute("CenterX"));
-    var cy = Number(camElm[0].getAttribute("CenterY"));
-    var w = Number(camElm[0].getAttribute("Width"));
-    var viewport = camElm[0].getAttribute("Viewport").split(" ");
-    var bgColor = camElm[0].getAttribute("BgColor").split(" ");
-    // make sure viewport and color are number
-    this._convertToNum(bgColor);
-    this._convertToNum(viewport);
+    
+    var camInput = this._getCameraInput(camElm);
 
     var cam = new Camera(
-            vec2.fromValues(cx, cy), // position of the camera
-            w, // width of camera
-            viewport                  // viewport (orgX, orgY, width, height)
+            vec2.fromValues(camInput[0], camInput[1]), // position of the camera
+            camInput[2], // width of camera
+            camInput[3]                  // viewport (orgX, orgY, width, height)
             );
-    cam.setBackgroundColor(bgColor);
+    cam.setBackgroundColor(camInput[4]);
     return cam;
 };
 
+SceneFileParser.prototype.parseMiniMap = function () {
+    var camElm = this._getElm("MiniMap");
+    
+    var camInput = this._getCameraInput(camElm);
+
+    var miniMap = new MiniMap(
+            vec2.fromValues(camInput[0], camInput[1]), // position of the camera
+            camInput[2], // width of camera
+            camInput[3]                  // viewport (orgX, orgY, width, height)
+            );
+    miniMap.setBackgroundColor(camInput[4]);
+    return miniMap;
+};
+
+SceneFileParser.prototype._getCameraInput = function (camera) {
+    var cx = Number(camera[0].getAttribute("CenterX"));
+    var cy = Number(camera[0].getAttribute("CenterY"));
+    var w = Number(camera[0].getAttribute("Width"));
+    var viewport = camera[0].getAttribute("Viewport").split(" ");
+    var bgColor = camera[0].getAttribute("BgColor").split(" ");
+    // make sure viewport and color are number
+    this._convertToNum(bgColor);
+    this._convertToNum(viewport);
+    
+    return [cx, cy, w, viewport, bgColor];
+};
 
 SceneFileParser.prototype.parseLights = function () {
     var lightSet = new LightSet();
@@ -86,7 +106,7 @@ SceneFileParser.prototype.parseLights = function () {
 
 SceneFileParser.prototype.parseRenderablePlatform = function() {
     var elm = this._getElm("RenderablePlatform");
-    var i, x, y, w, h, d, p, c, b, z;
+    var i, x, y, w, h, d, p, c, z;
     var allPlatforms = new GameObjectSet();
     for (i = 0; i < elm.length; i++) {
         x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
@@ -95,7 +115,6 @@ SceneFileParser.prototype.parseRenderablePlatform = function() {
         h = Number(elm.item(i).attributes.getNamedItem("Height").value);
         d = elm.item(i).attributes.getNamedItem("DrawRigid").value.toLowerCase() === 'true';
         c = elm.item(i).attributes.getNamedItem("Color");
-        b = elm.item(i).attributes.getNamedItem("HomeNest").value.toLowerCase() === 'true';
         z = elm.item(i).attributes.getNamedItem("Ground").value.toLowerCase() === 'true';
    
         var colArray = null;
@@ -108,19 +127,15 @@ SceneFileParser.prototype.parseRenderablePlatform = function() {
             var ca = c.value.toString();
             colArray = ca.split(",");
         }
-        
-        if(b){
-            colArray = [1,0,1,1];
-        }
 
         p = new RenderablePlatform();
         p.setSize(w, h);
         p.setPosition(x, y);
         p.setColor(colArray);
         p.setDrawRigidShape(d);
-        p.setHomeNest(b);
         p.setGround(z);
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, p);
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, p);
         
         allPlatforms.addToSet(p);
     }
@@ -128,19 +143,114 @@ SceneFileParser.prototype.parseRenderablePlatform = function() {
     return allPlatforms;
 };
 
-SceneFileParser.prototype.parseEggs = function() {
+SceneFileParser.prototype.parseNests = function(texture) {
+    var elm = this._getElm("Nest");
+    var i, x, y, w, h, d, p, c, b;
+    var allNests = new GameObjectSet();
+    for (i = 0; i < elm.length; i++) {
+        x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
+        y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
+        w = Number(elm.item(i).attributes.getNamedItem("Width").value);
+        h = Number(elm.item(i).attributes.getNamedItem("Height").value);
+        d = elm.item(i).attributes.getNamedItem("DrawRigid").value.toLowerCase() === 'true';
+        c = elm.item(i).attributes.getNamedItem("Color");
+        b = elm.item(i).attributes.getNamedItem("HomeNest").value.toLowerCase() === 'true';
+       // z = elm.item(i).attributes.getNamedItem("Ground").value.toLowerCase() === 'true';
+   
+        var colArray = null;
+        if(c === null){  
+            //default color dsw dbrown
+            colArray = [0.8, 0.6, 0, 1];
+        }
+        else{
+            //ca is a temp variable to hold the string
+            var ca = c.value.toString();
+            colArray = ca.split(",");
+        }
+        
+        //home nest color
+        if(b){
+            colArray = [0, 0.5, 0,1];
+        }
+        
+        //enforce min nest size of 30
+        if(w < 30){
+            w = 30;
+        }
+
+        p = new Nest(x, y, w, h, texture);
+        p.setColor(colArray);
+        p.setDrawRigidShape(d);
+        p.setHomeNest(b);
+        
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, p);
+        
+        allNests.addToSet(p);
+    }
+
+    return allNests;
+};
+
+SceneFileParser.prototype.parseTrees = function() {
+    var elm = this._getElm("Tree");
+    var i, x, y, w, h, tree;
+    var allTrees = new GameObjectSet();
+    for (i = 0; i < elm.length; i++) {
+        x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
+        y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
+        w = Number(elm.item(i).attributes.getNamedItem("Width").value);
+        h = Number(elm.item(i).attributes.getNamedItem("Height").value);
+
+        tree = new Tree();
+        tree.setPosition(x, y);
+        tree.setTrunkSize(w, h);
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eBackground, tree);
+        
+        allTrees.addToSet(tree);
+    }
+
+    return allTrees;
+};
+
+SceneFileParser.prototype.parseBranches = function() {
+    var elm = this._getElm("Branch");
+    var i, x, y, w, h, branch;
+    var allBranches = new GameObjectSet();
+    for (i = 0; i < elm.length; i++) {
+        x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
+        y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
+        w = Number(elm.item(i).attributes.getNamedItem("Width").value);
+        h = Number(elm.item(i).attributes.getNamedItem("Height").value);
+
+        branch = new Branch();
+        branch.setPosition(x, y-4);
+        branch.setSize(w+2, h/3);
+        //branch.setColor([0,1,0,1]);
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, branch);
+        
+        allBranches.addToSet(branch);
+    }
+
+    return allBranches;
+};
+
+
+SceneFileParser.prototype.parseEggs = function(texture) {
     var elm = this._getElm("Egg");
-    var i, x, y, egg;
+    var i, x, y, egg, icon;
     var allEggs = new GameObjectSet();
     for (i = 0; i < elm.length; i++) {
         x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
         y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
 
-        egg = new Egg();
+        egg = new Egg(texture);
         egg.getXform().setPosition(x, y);
-        egg.setDrawRigidShape(true);
-        egg.toggleDrawRenderable();
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, egg);
+        
+        icon = new MiniIcon(texture, egg.getXform());
+        SpriteRenderable.prototype.setElementPixelPositions.call(icon, 0, 64, 512, 576);
+        SpriteRenderable.prototype.getXform.call(icon).setSize(10, 10);
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, icon);
         
         allEggs.addToSet(egg);
     }
@@ -148,9 +258,9 @@ SceneFileParser.prototype.parseEggs = function() {
     return allEggs;
 };
 
-SceneFileParser.prototype.parseBirds = function() {
+SceneFileParser.prototype.parseBirds = function(texture) {
     var elm = this._getElm("Bird");
-    var i, x, y, bird;
+    var i, x, y, bird, icon;
     var allBirds = new GameObjectSet();
     for (i = 0; i < elm.length; i++) {
         x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
@@ -160,6 +270,11 @@ SceneFileParser.prototype.parseBirds = function() {
         bird.getXform().setPosition(x, y);
         bird.setDrawRigidShape(true);
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, bird);
+        
+        /*icon = new MiniIcon(texture, bird.getXform());
+        SpriteRenderable.prototype.setElementPixelPositions.call(icon, 256, 0, 128, 128);
+        SpriteRenderable.prototype.getXform.call(icon).setSize(10, 10);
+        gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, icon);*/
         
         allBirds.addToSet(bird);
     }

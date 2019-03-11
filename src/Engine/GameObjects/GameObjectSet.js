@@ -93,3 +93,9 @@ GameObjectSet.prototype.draw = function (aCamera) {
         this.mSet[i].draw(aCamera);
     }
 };
+
+GameObjectSet.prototype.concat = function (set) {
+    var gos = new GameObjectSet();
+    gos.mSet = this.mSet.concat(set.mSet);
+    return gos;
+};

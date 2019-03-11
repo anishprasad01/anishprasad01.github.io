@@ -69,6 +69,14 @@ RigidRectangle.prototype.adjustPositionBy = function(v, delta) {
     this.rotateVertices();
 };
 
+RigidRectangle.prototype.setPosition = function(x, y) {
+    this.mXform.setPosition(x,y);
+};
+
+RigidRectangle.prototype.getWidth = function() {
+    return this.mXform.getWidth();
+};
+
 RigidRectangle.prototype.setSize = function (w, h) {
     this.mWidth = w;
     this.mHeight = h;

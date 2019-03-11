@@ -87,11 +87,6 @@ gEngine.DefaultResources = (function () {
 
     // Default font
     var kDefaultFont = "assets/fonts/system-default-font";
-    // Particles
-    var kParticleTexture = "assets/ParticleSystem/particle.png";
-    var fireParticleTexture = "assets/ParticleSystem/flameparticle.png";
-    var smokeParticleTexture = "assets/ParticleSystem/smokeparticle.png";
-    var snowParticleTexture = "assets/ParticleSystem/snowparticle.png";
     
     // UI
     var UIRadarButtonTexture = "assets/UI/radarbutton.png";
@@ -215,11 +210,6 @@ gEngine.DefaultResources = (function () {
         
         // load default font
         gEngine.Fonts.loadFont(kDefaultFont);
-        // load particles
-        gEngine.Textures.loadTexture(kParticleTexture);
-        gEngine.Textures.loadTexture(fireParticleTexture);
-        gEngine.Textures.loadTexture(smokeParticleTexture);
-        gEngine.Textures.loadTexture(snowParticleTexture);
         
         gEngine.Textures.loadTexture(UIRadarButtonTexture);
         gEngine.Textures.loadTexture(UIDropDownArrow);
@@ -269,12 +259,6 @@ gEngine.DefaultResources = (function () {
 
         // default font
         gEngine.Fonts.unloadFont(kDefaultFont);
-        
-        // particles
-        gEngine.Textures.unloadTexture(kParticleTexture);
-        gEngine.Textures.unloadTexture(fireParticleTexture);
-        gEngine.Textures.unloadTexture(smokeParticleTexture);
-        gEngine.Textures.unloadTexture(snowParticleTexture);
         
         gEngine.Textures.unloadTexture(UIRadarButtonTexture);
         gEngine.Textures.unloadTexture(UIDropDownArrow);
