@@ -3,6 +3,7 @@
 function MainMenu() {
     this.mMenuState = MainMenu.state.HOME;
     this.mLevelChoice = 1;
+    this.mRestart = false;
     
     this.mTitle = null;
     this.mStartGameButton = null;
@@ -147,6 +148,11 @@ MainMenu.prototype.draw = function () {
 };
 
 MainMenu.prototype.update = function () {    
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.R)){
+        this.mRestart = true;
+        gEngine.GameLoop.stop();
+    }
+    
     if(this.mMenuState === MainMenu.state.HOME){
         this.mStartGameButton.update();
         this.mLevelSelectButton.update();
