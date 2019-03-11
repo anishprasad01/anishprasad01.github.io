@@ -169,7 +169,7 @@ Level1.prototype.update = function () {
         this.mRestart = true;
         gEngine.GameLoop.stop();
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.E)) {
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.H)) {
         gEngine.GameLoop.stop();
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
