@@ -19,6 +19,7 @@ function MainMenu() {
     this.mLineThree = null;
     this.mLineFour = null;
     this.mLineFive = null;
+    this.mLineSix = null;
 
     this.kBackgroundMusic = "assets/Audio/MainTheme.mp3";
     this.kBackgroundSprite = "assets/Backdrops/bg.png"
@@ -86,7 +87,8 @@ MainMenu.prototype.initialize = function () {
     this.mLineTwo = new UIText("Hold Space: Grab Egg", [390, 340], 7, 1, 2, [1, 1, 1, 1]);
     this.mLineThree = new UIText("Hold M: Show Minimap", [390, 290], 7, 1, 2, [1, 1, 1, 1]);
     this.mLineFour = new UIText("P: Pause", [390, 240], 7, 1, 2, [1, 1, 1, 1]);
-    this.mLineFive = new UIText("Q: Quit to Main Menu", [390, 190], 7, 1, 2, [1, 1, 1, 1]);
+    this.mLineFive = new UIText("R: Restart Current Level", [390, 190], 7, 1, 2, [1, 1, 1, 1]);
+    this.mLineSix = new UIText("Q: Quit to Main Menu", [390, 140], 7, 1, 2, [1, 1, 1, 1]);
     
     
     
@@ -130,6 +132,7 @@ MainMenu.prototype.draw = function () {
         this.mLineThree.draw(this.mCamera);
         this.mLineFour.draw(this.mCamera);
         this.mLineFive.draw(this.mCamera);
+        this.mLineSix.draw(this.mCamera);
     }
     else if(this.mMenuState === MainMenu.state.CREDITS){
         this.mTitle.setText("Credits");
