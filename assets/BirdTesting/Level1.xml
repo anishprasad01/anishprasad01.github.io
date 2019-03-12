@@ -1,5 +1,5 @@
 <MyGameLevel>
-    <Camera CenterX="0" CenterY="37.5" Width="200" 
+    <Camera CenterX="0" CenterY="37.5" Width="120" 
             Viewport="0 0 800 600"   
             BgColor="0.8 0.9 1.0 1.0"
     />      

@@ -69,10 +69,10 @@ SecretLevel.prototype.initialize = function () {
     gEngine.DefaultResources.setGlobalAmbientColor([1, 1, 1, 1]);
     gEngine.DefaultResources.setGlobalAmbientIntensity(1.0);
     
-    this.mUITitle = new UIText("SECRET LEVEL", [400, 560], 8, 1, 2, [0.1, 1, 1, 1]);
+    this.mUITitle = new UIText("SECRET LEVEL", [400, 560], 5, 1, 2, [0.1, 1, 1, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUITitle);
     
-    this.mUIScore = new UIText("Score: 0", [400, 540], 5, 1, 2, [1, 1, 1, 1]);
+    this.mUIScore = new UIText("Score: 0", [400, 540], 3, 1, 2, [1, 1, 1, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUIScore);
     
     var parser = new SceneFileParser(this.kLevelFile);
