@@ -1,8 +1,9 @@
 "use strict";
 
-function Level1() {
+function SecretLevel() {
     this.kLevelFile = "assets/BirdTesting/Level1.xml";
     this.kBirdTexture = "assets/Birds/bird-sketch-2.png";
+    this.kKelvin = "assets/Birds/kelvin-bird.png";
     this.kBackgroundMusic = "assets/Audio/Level1BG.mp3";
     this.kBackgroundSprite = "assets/Backdrops/bg.png";
     this.mUITitle = null;
@@ -34,25 +35,27 @@ function Level1() {
     
     //this.mScreenKeyboard = null;
 }
-gEngine.Core.inheritPrototype(Level1, Scene);
+gEngine.Core.inheritPrototype(SecretLevel, Scene);
 
 
-Level1.prototype.loadScene = function () {
+SecretLevel.prototype.loadScene = function () {
     gEngine.TextFileLoader.loadTextFile(this.kLevelFile, gEngine.TextFileLoader.eTextFileType.eXMLFile);
     gEngine.Textures.loadTexture(this.kBirdTexture);
+    gEngine.Textures.loadTexture(this.kKelvin);
     gEngine.Textures.loadTexture(this.kBackgroundSprite);
     gEngine.AudioClips.loadAudio(this.kBackgroundMusic);
 };
 
-Level1.prototype.unloadScene = function () {
+SecretLevel.prototype.unloadScene = function () {
     gEngine.LayerManager.cleanUp();
     gEngine.TextFileLoader.unloadTextFile(this.kLevelFile);
     gEngine.Textures.unloadTexture(this.kBirdTexture);
+    gEngine.Textures.unloadTexture(this.kKelvin);
     gEngine.Textures.unloadTexture(this.kBackgroundSprite);
     gEngine.AudioClips.stopBackgroundAudio();
     
     if (this.mRestart === true) {
-        gEngine.Core.startScene(new Level1());
+        gEngine.Core.startScene(new SecretLevel());
     }
     else if(this.mQuitLevel) {
         gEngine.Core.startScene(new MainMenu());
@@ -62,11 +65,11 @@ Level1.prototype.unloadScene = function () {
     }
 };
 
-Level1.prototype.initialize = function () {
+SecretLevel.prototype.initialize = function () {
     gEngine.DefaultResources.setGlobalAmbientColor([1, 1, 1, 1]);
     gEngine.DefaultResources.setGlobalAmbientIntensity(1.0);
     
-    this.mUITitle = new UIText("Level 1", [400, 560], 8, 1, 2, [0.1, 1, 1, 1]);
+    this.mUITitle = new UIText("SECRET LEVEL", [400, 560], 8, 1, 2, [0.1, 1, 1, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUITitle);
     
     this.mUIScore = new UIText("Score: 0", [400, 540], 5, 1, 2, [1, 1, 1, 1]);
@@ -109,34 +112,30 @@ Level1.prototype.initialize = function () {
         this.mEggPhysicsObjects.addToSet(this.mEggSet.getObjectAt(i));
     }
 
-    this.mBird = new PlayerBird(this.kBirdTexture, this.mNestSet.concat(this.mPlatformSet) ,this.mEggSet);
+    this.mBird = new PlayerBird(this.kKelvin, this.mNestSet.concat(this.mPlatformSet) ,this.mEggSet);
     this.mBird.getXform().setPosition(40, 15);
-    this.mBird.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mBird);
     this.mBirdPhysicsObjects.addToSet(this.mBird);
     
-    this.mEnemyOne = new EnemyBird(this.kBirdTexture, this.mBird, [-50, -10], [50, 50]);
+    this.mEnemyOne = new EnemyBird(this.kKelvin, this.mBird, [-50, -10], [75, 75]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyOne.getXform().setPosition(-50, 0);
-    this.mEnemyOne.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyOne);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyOne);
     
-    this.mEnemyTwo = new EnemyBird(this.kBirdTexture, this.mBird, [50, 55], [50, 50]);
+    this.mEnemyTwo = new EnemyBird(this.kKelvin, this.mBird, [50, 55], [70, 70]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyTwo.getXform().setPosition(50, 55);
-    this.mEnemyTwo.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyTwo);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyTwo);
     
-    this.mEnemyThree = new EnemyBird(this.kBirdTexture, this.mBird, [-45, 90], [50, 50]);
+    this.mEnemyThree = new EnemyBird(this.kKelvin, this.mBird, [-45, 90], [75, 75]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyThree.getXform().setPosition(-45, 90);
-    this.mEnemyThree.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyThree);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyThree);
     
-    var icon = new MiniIcon(this.kBirdTexture, this.mBird.getXform());
+    var icon = new MiniIcon(this.kKelvin, this.mBird.getXform());
     SpriteRenderable.prototype.setElementPixelPositions.call(icon, 768, 896, 896, 1024);
     SpriteRenderable.prototype.getXform.call(icon).setSize(20, 20);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, icon);
@@ -154,7 +153,7 @@ Level1.prototype.initialize = function () {
     gEngine.AudioClips.playBackgroundAudio(this.kBackgroundMusic);
 };
 
-Level1.prototype.draw = function () {
+SecretLevel.prototype.draw = function () {
     gEngine.Core.clearCanvas([1.0, 1.0, 1.0, 1.0]);
 
     this.mCamera.setupViewProjection();
@@ -168,7 +167,7 @@ Level1.prototype.draw = function () {
     //gEngine.LayerManager.drawLayer(gEngine.eLayer.eActors, this.mMiniMap);
 };
 
-Level1.prototype.update = function () {    
+SecretLevel.prototype.update = function () {    
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.R)) {
         this.mRestart = true;
         gEngine.GameLoop.stop();
@@ -184,7 +183,7 @@ Level1.prototype.update = function () {
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.P)) {
         if(this.mPaused){
             this.mPaused = false;
-            this.mUITitle.setText("Level 1");
+            this.mUITitle.setText("SECRET LEVEL");
         }
         else {
             this.mPaused = true;

@@ -10,7 +10,7 @@ function Bird(texture, platforms, eggs) {
     this.mSprite.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
     this.mSprite.setAnimationSpeed(60 / 8);
     this.mSprite.getXform().setSize(20, 20);
-    this.mSprite.setColor([1,1,1,1]);
+    //this.mSprite.setColor([1,1,1,1]);
     GameObject.call(this, this.mSprite);
     
     // Physics stuff

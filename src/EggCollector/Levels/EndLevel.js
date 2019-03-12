@@ -16,6 +16,7 @@ function EndLevel(finalScore, possibleScore) {
     
     this.mRestart = false;
     this.mQuitGame = false;
+    this.mSecretLevel = false;
 };
 gEngine.Core.inheritPrototype(EndLevel, Scene);
 
@@ -38,6 +39,9 @@ EndLevel.prototype.unloadScene = function () {
     }
     else if (this.mQuitGame){
         gEngine.Core.startScene(new MainMenu());
+    }
+    else if (this.mSecretLevel){
+        gEngine.Core.startScene(new SecretLevel());
     }
 //    else {
 //        gEngine.Core.startScene(new MainMenu());
@@ -106,6 +110,12 @@ EndLevel.prototype.update = function () {
     else if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
         this.mQuitGame = true;
         gEngine.GameLoop.stop();
+    }
+    else if(gEngine.Input.isKeyClicked(gEngine.Input.keys.T)){
+        if(this.mPossibleScore === this.mFinalScore){
+            this.mSecretLevel = true;
+            gEngine.GameLoop.stop();
+        }
     }
     
     this.mMainMenuButton.update();
