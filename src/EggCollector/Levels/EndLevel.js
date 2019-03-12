@@ -112,10 +112,8 @@ EndLevel.prototype.update = function () {
         gEngine.GameLoop.stop();
     }
     else if(gEngine.Input.isKeyClicked(gEngine.Input.keys.T)){
-        if(this.mPossibleScore === this.mFinalScore){
-            this.mSecretLevel = true;
-            gEngine.GameLoop.stop();
-        }
+        this.mSecretLevel = true;
+        gEngine.GameLoop.stop();
     }
     
     this.mMainMenuButton.update();
