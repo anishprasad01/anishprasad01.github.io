@@ -195,19 +195,19 @@ BirdCreek.prototype.initialize = function () {
     this.mUITitle = new UIText("Bird Creek", [400, 560], 5, 1, 2, [0.1, 1, 1, 1]);
     this.mAllParticles = new ParticleGameObjectSet();
     
-    this.mEnemyBird = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [150, 30], [60, 60], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBird = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [150, 30], [70, 70], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBird);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBird);
     this.mEnemyBird.getRenderable().addLight(this.mForestSun);
     this.mEnemyBird.getRenderable().addLight(this.mSunset);
     
-    this.mEnemyBirdTwo = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-116, 40], [50, 50], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBirdTwo = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-116, 45], [60, 60], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdTwo);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdTwo);
     this.mEnemyBirdTwo.getRenderable().addLight(this.mForestSun);
     this.mEnemyBirdTwo.getRenderable().addLight(this.mSunset);
     
-    this.mEnemyBirdThree = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-340, -35], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBirdThree = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-340, -30], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdThree);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdThree);
     this.mEnemyBirdThree.getRenderable().addLight(this.mForestSun);
@@ -219,7 +219,7 @@ BirdCreek.prototype.initialize = function () {
     this.mEnemyBirdFour.getRenderable().addLight(this.mForestSun);
     this.mEnemyBirdFour.getRenderable().addLight(this.mSunset);
     
-    this.mEnemyBirdFive = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [330, 20], [80, 80], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBirdFive = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [340, 30], [90, 90], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdFive);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdFive);
     this.mEnemyBirdFive.getRenderable().addLight(this.mForestSun);
@@ -268,9 +268,9 @@ BirdCreek.prototype.update = function () {
             this.mUITitle.setText("PAUSED");
         }
     }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.E)) {
-        gEngine.GameLoop.stop();
-    }
+//    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.E)) {
+//        gEngine.GameLoop.stop();
+//    }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Escape)) {
         this.mSwitchLevel = true;
         gEngine.GameLoop.stop();
