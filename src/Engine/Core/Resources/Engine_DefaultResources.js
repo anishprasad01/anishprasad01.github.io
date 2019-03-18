@@ -109,7 +109,7 @@ gEngine.DefaultResources = (function () {
         mIllumShader = new IllumShader(kTextureVS, kIllumFS);
         mShadowReceiverShader = new SpriteShader(kTextureVS, kShadowReceiverFS);
         mShadowCasterShader = new ShadowCasterShader(kTextureVS, kShadowCasterFS);
-        mParticleShader = new TextureShader(kTextureVS, kParticleFS);
+        mParticleShader = new TextureShader(kTextureVS, kTextureFS);
         callBackFunction();
     };
 

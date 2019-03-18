@@ -41,10 +41,10 @@ ParticleGameObjectSet.prototype.addEmitterAt = function (p, n, func) {
  * @memberOf ParticleGameObjectSet
  */
 ParticleGameObjectSet.prototype.draw = function (aCamera) {
-    var gl = gEngine.Core.getGL();
-    gl.blendFunc(gl.ONE, gl.ONE);  // for additive blending!
+//    var gl = gEngine.Core.getGL();
+//    gl.blendFunc(gl.ONE, gl.ONE);  // for additive blending!
     GameObjectSet.prototype.draw.call(this, aCamera);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // restore alpha blending
+//    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // restore alpha blending
 };
 
 /**

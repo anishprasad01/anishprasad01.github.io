@@ -64,11 +64,11 @@ Egg.prototype.isInPlay = function () {
 Egg.prototype.setNotInPlay = function (inputStatus) {
     this.mInPlay = false;
     if(inputStatus === Egg.status.SCORE && this.mStatus === Egg.status.INPLAY){
-        this.mSprite.setColor([0,1,0,1]);
+        this.mSprite.setColor([0,1,0,0.4]);
         this.mStatus = Egg.status.SCORE;
     }
     else if(inputStatus === Egg.status.GROUNDED && this.mStatus === Egg.status.INPLAY){
-        this.mSprite.setColor([1,0,0,1]);
+        this.mSprite.setColor([1,0,0,0.4]);
         this.mStatus = Egg.status.GROUNDED;
     }
 };

@@ -4,10 +4,14 @@ function BirdCreek() {
     this.kLevelFile = "assets/BirdCreek/BirdCreek.xml";
     this.kBirdTexture = "assets/Birds/bird-sketch-3.png";
     this.kBirdNormal = "assets/Birds/bird-sketch-3-normal.png";
-    this.kBirdFeatherTexture = "assets/Birds/bird-sketch-3-feather.png";
+    this.kBirdFeatherTexture = "assets/Birds/feather.png";
+    this.kHeartTexture = "assets/BirdCreek/heart.png";
     this.kBackgroundFile = "assets/BirdCreek/bg.png";
     this.kForegroundFile = "assets/BirdCreek/fg.png";
     this.kBackgroundMusic = "assets/Audio/EggCollector.mp3";
+    this.kEggGrabSound = "assets/Audio/drop.mp3";
+    this.kEggReleaseSound = "assets/Audio/drop.mp3";
+    this.kEggHomeSound = "assets/Audio/whistle.mp3";
     this.mUITitle = null;
     this.mUIScore = null;
     this.mUIRemainder = null;
@@ -32,6 +36,10 @@ function BirdCreek() {
     this.mAllParticles = null;
     
     this.mEnemyBird = null;
+    this.mEnemyBirdTwo = null;
+    this.mEnemyBirdThree = null;
+    this.mEnemyBirdFour = null;
+    this.mEnemyBirdFive = null;
     
     this.mScore = 0;
     this.mRemainingEggs = 0;
@@ -48,7 +56,11 @@ BirdCreek.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kBirdFeatherTexture);
     gEngine.Textures.loadTexture(this.kBackgroundFile);
     gEngine.Textures.loadTexture(this.kForegroundFile);
+    gEngine.Textures.loadTexture(this.kHeartTexture);
     gEngine.AudioClips.loadAudio(this.kBackgroundMusic);
+    gEngine.AudioClips.loadAudio(this.kEggGrabSound);
+    gEngine.AudioClips.loadAudio(this.kEggReleaseSound);
+    gEngine.AudioClips.loadAudio(this.kEggHomeSound);
 };
 
 BirdCreek.prototype.unloadScene = function () {
@@ -60,6 +72,10 @@ BirdCreek.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBirdFeatherTexture);
     gEngine.Textures.unloadTexture(this.kBackgroundFile);
     gEngine.Textures.unloadTexture(this.kForegroundFile);
+    gEngine.Textures.unloadTexture(this.kHeartTexture);
+    gEngine.AudioClips.unloadAudio(this.kEggGrabSound);
+    gEngine.AudioClips.unloadAudio(this.kEggReleaseSound);
+    gEngine.AudioClips.unloadAudio(this.kEggHomeSound);
     
     if (this.mRestart) {
         gEngine.Core.startScene(new BirdCreek());
@@ -158,6 +174,8 @@ BirdCreek.prototype.initialize = function () {
 
     this.mBird = new PlayerBird(this.kBirdTexture, this.mNestSet.concat(this.mBirdPlatformSet) ,this.mEggSet, this.kBirdNormal);
     this.mBird.getXform().setPosition(-340, -45);
+    this.mBird.setGrabSound(this.kEggGrabSound);
+    this.mBird.setReleaseSound(this.kEggReleaseSound);
     this.mBird.setWingPower([160, 160]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mBird);
     this.mBirdPhysicsObjects.addToSet(this.mBird);
@@ -174,15 +192,39 @@ BirdCreek.prototype.initialize = function () {
         gEngine.LayerManager.moveToLayerFront(gEngine.eLayer.eActors, this.mEggSet.getObjectAt(i));
     }
     
+    this.mUITitle = new UIText("Bird Creek", [400, 560], 5, 1, 2, [0.1, 1, 1, 1]);
     this.mAllParticles = new ParticleGameObjectSet();
     
-    this.mEnemyBird = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-30, 40], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBird = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [150, 30], [60, 60], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBird);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBird);
     this.mEnemyBird.getRenderable().addLight(this.mForestSun);
     this.mEnemyBird.getRenderable().addLight(this.mSunset);
+    
+    this.mEnemyBirdTwo = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-116, 40], [50, 50], this.kBirdFeatherTexture, this.mAllParticles);
+    gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdTwo);
+    this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdTwo);
+    this.mEnemyBirdTwo.getRenderable().addLight(this.mForestSun);
+    this.mEnemyBirdTwo.getRenderable().addLight(this.mSunset);
+    
+    this.mEnemyBirdThree = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-340, -35], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
+    gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdThree);
+    this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdThree);
+    this.mEnemyBirdThree.getRenderable().addLight(this.mForestSun);
+    this.mEnemyBirdThree.getRenderable().addLight(this.mSunset);
+    
+    this.mEnemyBirdFour = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-295, 92], [50, 50], this.kBirdFeatherTexture, this.mAllParticles);
+    gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdFour);
+    this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdFour);
+    this.mEnemyBirdFour.getRenderable().addLight(this.mForestSun);
+    this.mEnemyBirdFour.getRenderable().addLight(this.mSunset);
+    
+    this.mEnemyBirdFive = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [330, 20], [80, 80], this.kBirdFeatherTexture, this.mAllParticles);
+    gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdFive);
+    this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdFive);
+    this.mEnemyBirdFive.getRenderable().addLight(this.mForestSun);
+    this.mEnemyBirdFive.getRenderable().addLight(this.mSunset);
 
-    this.mUITitle = new UIText("The Valley", [400, 560], 5, 1, 2, [0.1, 1, 1, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mUITitle);
     
     this.mUIScore = new UIText("Score: 0", [400, 540], 3, 1, 2, [1, 1, 1, 1]);
@@ -217,7 +259,7 @@ BirdCreek.prototype.update = function () {
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.P)) {
         if(this.mPaused){
             this.mPaused = false;
-            this.mUITitle.setText("The Valley");
+            this.mUITitle.setText("Bird Creek");
             this.mUITitle.setColor([0.1, 1, 1, 1]);
         }
         else {
@@ -246,21 +288,28 @@ BirdCreek.prototype.update = function () {
         gEngine.Physics.processCollision(this.mBirdPhysicsObjects, []);
         gEngine.Physics.processCollision(this.mEggPhysicsObjects, []);
 
+        var egg = null;
         for (var i = 0; i < this.mEggSet.size(); i++) {
-            if (this.mEggSet.getObjectAt(i).isInPlay()) {
-                var status = this.mEggSet.getObjectAt(i).checkIfHome(this.mHomeNest);
+            egg = this.mEggSet.getObjectAt(i);;
+            if (egg.isInPlay()) {
+                var status = egg.checkIfHome(this.mHomeNest);
 
-                if (status && this.mEggSet.getObjectAt(i).isInPlay()) {
+                if (status && egg.isInPlay()) {
                     this.mScore++;
                     --this.mRemainingEggs;
-                    this.mEggSet.getObjectAt(i).setNotInPlay(Egg.status.SCORE);
+                    if (this.mRemainingEggs > 0)
+                        gEngine.AudioClips.playACue(this.kEggHomeSound);
+                    
+                    this._generateHearts(12);
+                    
+                    egg.setNotInPlay(Egg.status.SCORE);
                     //this.mEggSet.getObjectAt(i).setPhysicsEnabled(false);
                 } else {
-                    status = this.mEggSet.getObjectAt(i).checkIfOnGround(this.mGround);
+                    status = egg.checkIfOnGround(this.mGround);
                     if (status) {
                         this.mCamera.shake(7,7,6,5);
                         --this.mRemainingEggs;
-                        this.mEggSet.getObjectAt(i).setNotInPlay(Egg.status.GROUNDED);
+                        egg.setNotInPlay(Egg.status.GROUNDED);
                         //this.mEggSet.getObjectAt(i).setPhysicsEnabled(false);
                     }
                 }
@@ -300,5 +349,26 @@ BirdCreek.prototype.update = function () {
 
         this.mCamera.panTo(x, y);
         this.mCamera.update();
+    }
+};
+
+BirdCreek.prototype._generateHearts = function(hearts) {
+    var xf = this.mHomeNest.getXform();
+    for (var i = 0; i < hearts; i++) {
+        var life = 120 + Math.random() * 60;
+        var p = new ParticleGameObject(this.kHeartTexture, xf.getXPos() + 26 / hearts * i - 12, xf.getYPos(), life);
+        p.getXform().setSize(5, 5);
+
+        // size of the particle
+        var r = 4 + Math.random() * 1.5;
+        p.getXform().setSize(r, r);
+
+        p.getParticle().setVelocity([0, Math.random() * 5]);
+        p.getParticle().setAcceleration([0, Math.random() * 20]);
+
+        // size delta
+        p.setSizeDelta(0.999 + Math.random() * 0.002);
+        
+        this.mAllParticles.addToSet(p);
     }
 };

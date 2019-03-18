@@ -9,8 +9,8 @@ function EndLevel(finalScore, possibleScore) {
     this.kPossibleScore = possibleScore;
     
     this.kBackgroundMusic = "assets/Audio/FinishScreenBG.mp3";
-    this.kBackgroundSprite = "assets/Backdrops/bg.png";
-    this.kButtonSprite = "assets/Backdrops/bg1.png"
+    this.kBackgroundSprite = "assets/Backdrops/menu-bg.png";
+    this.kButtonSprite = "assets/UI/button.png"
     
     this.mRestartButton = null;
     this.mMainMenuButton = null;
@@ -69,25 +69,28 @@ EndLevel.prototype.initialize = function () {
         this.text = "Better Luck Next Time!";
     }
     
-    this.mFinishMessage = new UIText(this.text, [400, 430], 12, 1, 2, [1, 1, 1, 1]);
+    this.mFinishMessage = new UIText(this.text, [400, 460], 12, 1, 2, [1, 1, 1, 1]);
+    this.mFinishMessageShadow = new UIText(this.text, [400, 455], 12, 1, 2, [0, 0, 0, 1]);
+    gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mFinishMessageShadow);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mFinishMessage);
+    
     
     var totalScoreText = "Total Score: " + this.kFinalScore;
     
-    this.mFinalScore = new UIText(totalScoreText, [400, 330], 10, 1, 2, [1, 1, 1, 1]);
+    this.mFinalScore = new UIText(totalScoreText, [400, 360], 10, 1, 2, [0, 0, 0, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mFinalScore);
     
     var possibleScoreText = "Max Possible Score: " + this.kPossibleScore;
     
-    this.mPossibleScore = new UIText(possibleScoreText, [400, 280], 10, 1, 2, [1, 1, 1, 1]);
+    this.mPossibleScore = new UIText(possibleScoreText, [400, 310], 10, 1, 2, [0, 0, 0, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mPossibleScore);
     
-    this.mThanksMessage = new UIText("Thanks for Playing!", [400, 180], 10, 1, 2, [1, 1, 1, 1]);
+    this.mThanksMessage = new UIText("Thanks for Playing!", [400, 210], 10, 1, 2, [0, 0, 0, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mThanksMessage);
     
-    this.mRestartButton = new UIButton(this.kButtonSprite,this.restart,this,[390,120],[270,60],"Play Again",5,[0.2,0.5,0,1],[1,1,1,1]);
+    this.mRestartButton = new UIButton(this.kButtonSprite,this.restart,this,[390,135],[270,60],"Play Again",5,[0.2,0.5,0,1],[1,1,1,1]);
     
-    this.mMainMenuButton = new UIButton(this.kButtonSprite,this.goHome,this,[390,55],[270,60],"Return to Main Menu",5,[0.8,0,0.2,1],[1,1,1,1]);
+    this.mMainMenuButton = new UIButton(this.kButtonSprite,this.goHome,this,[390,60],[270,60],"Return to Main Menu",5,[0.8,0,0.2,1],[1,1,1,1]);
     
     this.mBackground = new TextureRenderable(this.kBackgroundSprite);
     this.mBackground.getXform().setPosition(0, 50);
@@ -115,10 +118,10 @@ EndLevel.prototype.update = function () {
         this.mQuitGame = true;
         gEngine.GameLoop.stop();
     }
-    else if(gEngine.Input.isKeyClicked(gEngine.Input.keys.T)){
-        this.mSecretLevel = true;
-        gEngine.GameLoop.stop();
-    }
+//    else if(gEngine.Input.isKeyClicked(gEngine.Input.keys.T)){
+//        this.mSecretLevel = true;
+//        gEngine.GameLoop.stop();
+//    }
     
     this.mRestartButton.update();
     this.mMainMenuButton.update();

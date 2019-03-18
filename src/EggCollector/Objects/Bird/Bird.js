@@ -63,6 +63,9 @@ function Bird(texture, platforms, eggs, normal) {
     this.mShakeFrequency = 4;
     //shake duration
     this.mShakeDuration = 60;
+    
+    this.mGrabSound = null;
+    this.mReleaseSound = null;
 }
 gEngine.Core.inheritPrototype(Bird, GameObject);
 
@@ -109,6 +112,9 @@ Bird.prototype.grab = function() {
             this.mItem = this.mEggs.getObjectAt(i);
             this.mItem.setPhysicsEnabled(false);
             this.mItem.getXform().setRotationInDegree(0);
+            if (this.mGrabSound !== null) {
+                gEngine.AudioClips.playACue(this.mGrabSound);
+            }
             return;
         }
     }
@@ -119,6 +125,9 @@ Bird.prototype.release = function() {
         this.mItem.setPhysicsEnabled(true);
         this.mItem.setVelocity(this.mVelocity);
         this.mItem = null;
+        if (this.mReleaseSound !== null) {
+            gEngine.AudioClips.playACue(this.mReleaseSound);
+        }
     }
 };
 
@@ -168,4 +177,12 @@ Bird.prototype.shake = function () {
         //perform shake
         this.mSprite.getXform().setPosition(this.mOscillationCenter[0] + shakeResults[0], this.mOscillationCenter[1] + shakeResults[1]);
     }
+};
+
+Bird.prototype.setGrabSound = function(sound) {
+    this.mGrabSound = sound;
+};
+
+Bird.prototype.setReleaseSound = function(sound) {
+    this.mReleaseSound = sound;
 };

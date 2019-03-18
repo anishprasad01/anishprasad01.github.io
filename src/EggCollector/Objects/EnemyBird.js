@@ -162,18 +162,17 @@ EnemyBird.prototype._checkPatrolBounds = function () {
     return patrolBoundResults;
 };
 
-EnemyBird.prototype._createParticle = function(atX, atY) { console.log("particle");
+EnemyBird.prototype._createParticle = function(atX, atY) {
     var life = 30 + Math.random() * 200;
     var p = new ParticleGameObject(this.kFeather, atX, atY, life);
     p.getRenderable().getXform().setSize(100, 100);
-    p.getRenderable().setColor([0.001, 0.001, 0.001, 1]);
     
     // size of the particle
     var r = 10 + Math.random() * 2.5;
     p.getXform().setSize(r, r);
     
-    // final color
-    p.setFinalColor([0.5, 0.5, 0.5, 1]);
+    r = Math.random() * Math.PI * 2;
+    p.getXform().setRotationInRad(r);
     
     // velocity on the particle
     var fx = 10 * Math.random() - 20 * Math.random();

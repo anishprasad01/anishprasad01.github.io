@@ -6,6 +6,7 @@ function MainMenu() {
     this.mRestart = false;
     
     this.mTitle = null;
+    this.mTitle2 = null;
     this.mStartGameButton = null;
     //this.mLevelSelectButton = null;
     this.mControlsButton = null;
@@ -23,8 +24,11 @@ function MainMenu() {
     this.mLineSix = null;
 
     this.kBackgroundMusic = "assets/Audio/MainTheme.mp3";
-    this.kBackgroundSprite = "assets/Backdrops/bg.png";
-    this.kButtonSprite = "assets/Backdrops/bg1.png";
+    this.kBackgroundSprite = "assets/Backdrops/menu-bg.png";
+    this.kButtonSprite = "assets/UI/button.png";
+    this.kBirdCreekButtonTexture = "assets/UI/birdcreek-button.png";
+    
+    //this.mBackgroundBird = null;
 }
 gEngine.Core.inheritPrototype(MainMenu, Scene);
 
@@ -39,12 +43,14 @@ MainMenu.state = Object.freeze({
 MainMenu.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kBackgroundSprite);
     gEngine.Textures.loadTexture(this.kButtonSprite);
+    gEngine.Textures.loadTexture(this.kBirdCreekButtonTexture);
     gEngine.AudioClips.loadAudio(this.kBackgroundMusic);
 };
 
 MainMenu.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kBackgroundSprite);
     gEngine.Textures.unloadTexture(this.kButtonSprite);
+    gEngine.Textures.unloadTexture(this.kBirdCreekButtonTexture);
     gEngine.AudioClips.stopBackgroundAudio();
     
     gEngine.LayerManager.cleanUp();
@@ -72,7 +78,8 @@ MainMenu.prototype.initialize = function () {
     this.mCamera.setBackgroundColor([0, 0, 0, 1]);
     
     
-    this.mTitle = new UIText("Egg Collector DX", [390, 460], 12, 1, 2, [1, 1, 1, 1]);
+    this.mTitle = new UIText("Egg Collector DX", [380, 484], 10, 1, 2, [1, 1, 1, 1]);
+    this.mTitle2 = new UIText("Egg Collector DX", [380, 480], 10, 1, 2, [0, 0, 0, 1]);
     
     this.mStartGameButton = new UIButton(this.kButtonSprite,this.startGame,this,[390,380],[200,60],"Start Game",5,[0.2,0.5,0,1],[1,1,1,1]);
     
@@ -87,19 +94,20 @@ MainMenu.prototype.initialize = function () {
     this.mBackButton = new UIButton(this.kButtonSprite,this.goHome,this,[100,80],[160,40],"Back",5,[0,0,0,1],[1,1,1,1]);
     
     //level buttons
-//    this.mLevelOneButton = new UIButton(this.kButtonSprite,this.startLevelOne,this,[390,350],[200,80],"Level 1: Valley",5,[1,1,1,1],[0,0,0,1]);
+    this.mLevelOneButton = new UIButton(this.kBirdCreekButtonTexture,this.startLevelOne,this,[390,350],[200,80],"Bird Creek",5,[1,1,1,1],[0,0,0,1]);
+
     
     //text
-    this.mLineOne = new UIText("WASD: Move Bird", [390, 390], 5, 1, 2, [1, 1, 1, 1]);
-    this.mLineTwo = new UIText("Hold Space: Grab Egg", [390, 340], 5, 1, 2, [1, 1, 1, 1]);
-    this.mLineThree = new UIText("Hold M: Show Minimap", [390, 290], 5, 1, 2, [1, 1, 1, 1]);
-    this.mLineFour = new UIText("P: Pause", [390, 240], 5, 1, 2, [1, 1, 1, 1]);
-    this.mLineFive = new UIText("R: Restart Current Level", [390, 190], 5, 1, 2, [1, 1, 1, 1]);
-    this.mLineSix = new UIText("Q: Quit to Main Menu", [390, 140], 5, 1, 2, [1, 1, 1, 1]);
+    this.mLineOne = new UIText("WASD: Move Bird", [390, 390], 5, 1, 2, [0, 0, 0, 1]);
+    this.mLineTwo = new UIText("Hold Space: Grab Egg", [390, 340], 5, 1, 2, [0, 0, 0, 1]);
+    this.mLineThree = new UIText("Hold M: Show Minimap", [390, 290], 5, 1, 2, [0, 0, 0, 1]);
+    this.mLineFour = new UIText("P: Pause", [390, 240], 5, 1, 2, [0, 0, 0, 1]);
+    this.mLineFive = new UIText("R: Restart Current Level", [390, 190], 5, 1, 2, [0, 0, 0, 1]);
+    this.mLineSix = new UIText("Q: Quit to Main Menu", [390, 140], 5, 1, 2, [0, 0, 0, 1]);
     
     this.mBackground = new TextureRenderable(this.kBackgroundSprite);
     this.mBackground.getXform().setPosition(0, 0);
-    this.mBackground.getXform().setSize(256, 200);
+    this.mBackground.getXform().setSize(256, 256);
     
     gEngine.AudioClips.playBackgroundAudio(this.kBackgroundMusic);
 };
@@ -109,10 +117,12 @@ MainMenu.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     this.mBackground.draw(this.mCamera);
+    this.mTitle2.draw(this.mCamera);
     this.mTitle.draw(this.mCamera);
     
     if(this.mMenuState === MainMenu.state.HOME){
         this.mTitle.setText("Egg Collector DX");
+        this.mTitle2.setText("Egg Collector DX");
         this.mStartGameButton.draw(this.mCamera);
         //this.mLevelSelectButton.draw(this.mCamera);
         this.mInstructionsButton.draw(this.mCamera);
@@ -126,6 +136,7 @@ MainMenu.prototype.draw = function () {
 //    }
     else if(this.mMenuState === MainMenu.state.CONTROLS){
         this.mTitle.setText("Controls");
+        this.mTitle2.setText("Controls");
         this.mBackButton.draw(this.mCamera);
         
         this.mLineOne.setText("WASD: Move Bird");
@@ -143,11 +154,12 @@ MainMenu.prototype.draw = function () {
     }
     else if(this.mMenuState === MainMenu.state.INSTRUCTIONS){
         this.mTitle.setText("How to Play");
+        this.mTitle2.setText("How to Play");
         this.mBackButton.draw(this.mCamera);
         
         this.mLineOne.setText("Carry eggs to the Home Nest on the Starting Stump to Score.");
         this.mLineTwo.setText("If an egg hits the ground, it cannot be used to Score.");
-        this.mLineThree.setText("Hitting an enemy bird with temporarily stun you both.");
+        this.mLineThree.setText("Hitting an enemy bird will temporarily stun you both.");
         this.mLineFour.setText("Stunned birds cannot carry eggs.");
         this.mLineFive.setText("When there are no eggs left in play, the game ends.");
         
@@ -159,6 +171,7 @@ MainMenu.prototype.draw = function () {
     }
     else if(this.mMenuState === MainMenu.state.CREDITS){
         this.mTitle.setText("Credits");
+        this.mTitle2.setText("Credits");
         this.mBackButton.draw(this.mCamera);
         
         this.mLineOne.setText("Created By: The Nameless Three");
