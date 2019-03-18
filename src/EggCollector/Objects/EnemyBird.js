@@ -1,7 +1,7 @@
 "use strict";
 
-function EnemyBird(texture, playerBird, patrolCenter, patrolSize) {
-    Bird.call(this, texture, new GameObjectSet(), new GameObjectSet());
+function EnemyBird(texture, normal, playerBird, patrolCenter, patrolSize, featherTexture, allParticles) {
+    Bird.call(this, texture, new GameObjectSet(), new GameObjectSet(), normal);
     
     this.cStunDuration = 1000;
     this.cDirections = Object.freeze({
@@ -13,6 +13,7 @@ function EnemyBird(texture, playerBird, patrolCenter, patrolSize) {
     this.cChangeDirectionDelay = 1000;
     this.cSpotDistanceSquared = 300;
     this.cUpwardMoveChance = 0.00375;
+    this.cNumberOfFeathers = 10;
     
     this.mPlayerBird = playerBird;
     
@@ -24,6 +25,9 @@ function EnemyBird(texture, playerBird, patrolCenter, patrolSize) {
     this.mCurrentLateralMovement = 0;
     this.mNextLateralMovement = Date.now();
     this.mReturningDirection = null;
+    
+    this.kFeather = featherTexture;
+    this.mAllParticles = allParticles;
 }
 
 gEngine.Core.inheritPrototype(EnemyBird, Bird);
@@ -110,6 +114,18 @@ EnemyBird.prototype.update = function () {
         this.mPlayerBird.attacked();
         
         this.mAttackStunEnd = Date.now() + this.cStunDuration;
+        
+        // If the collision didn't occur while stunned, then:
+        if (!this.mDidAttack) {
+            for (var i = 0; i < this.cNumberOfFeathers; i++) {
+                var newP = this._createParticle(this._getTransform().getXPos(), this._getTransform().getYPos());
+            
+                this.mAllParticles.addToSet(newP);
+            }
+            
+            Bird.prototype.newShake.call(this);
+        }
+        
         this.mDidAttack = true;
     }
 };
@@ -144,4 +160,28 @@ EnemyBird.prototype._checkPatrolBounds = function () {
     }
     
     return patrolBoundResults;
+};
+
+EnemyBird.prototype._createParticle = function(atX, atY) { console.log("particle");
+    var life = 30 + Math.random() * 200;
+    var p = new ParticleGameObject(this.kFeather, atX, atY, life);
+    p.getRenderable().getXform().setSize(100, 100);
+    p.getRenderable().setColor([0.001, 0.001, 0.001, 1]);
+    
+    // size of the particle
+    var r = 10 + Math.random() * 2.5;
+    p.getXform().setSize(r, r);
+    
+    // final color
+    p.setFinalColor([0.5, 0.5, 0.5, 1]);
+    
+    // velocity on the particle
+    var fx = 10 * Math.random() - 20 * Math.random();
+    var fy = 10 * Math.random();
+    p.getParticle().setVelocity([fx, fy]);
+    
+    // size delta
+    p.setSizeDelta(0.98);
+    
+    return p;
 };

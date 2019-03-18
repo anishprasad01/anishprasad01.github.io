@@ -32,6 +32,9 @@ function IllumShader(vertexShaderPath, fragmentShaderPath) {
 
     // reference to the normal map sampler
     this.mNormalSamplerRef = gl.getUniformLocation(this.mCompiledShader, "uNormalSampler");
+    
+    this.mFlipX = gl.getUniformLocation(this.mCompiledShader, "uFlipX");
+    this.mRotationZ = gl.getUniformLocation(this.mCompiledShader, "uRotationZ");
 }
 gEngine.Core.inheritPrototype(IllumShader, LightShader);
 //</editor-fold>
@@ -56,6 +59,13 @@ IllumShader.prototype.activateShader = function(pixelColor, aCamera) {
     // in the fragment shader
     this.mMaterialLoader.loadToShader(this.mMaterial);
     gl.uniform3fv(this.mCameraPosRef, this.mCameraPos);
+};
+
+IllumShader.prototype.adjustNormalMapToTransform = function(xf) {
+    var gl = gEngine.Core.getGL();
+    gl.useProgram(this.mCompiledShader);
+    gl.uniform1i(this.mFlipX, xf.getWidth() < 0);
+    gl.uniform1f(this.mRotationZ, xf.getRotationInRad());
 };
 
 /**

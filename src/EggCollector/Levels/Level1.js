@@ -12,6 +12,9 @@ function Level1() {
     
     this.mCamera = null;
     this.mMiniMap = null;
+    
+    this.mSun = null;
+    
     this.mBird = null;
     this.mEnemyOne = null;
     this.mEnemyTwo = null;
@@ -75,6 +78,27 @@ Level1.prototype.initialize = function () {
     var parser = new SceneFileParser(this.kLevelFile);
     this.mCamera = parser.parseCamera();
     
+    this.mSun = new Light();
+    this.mSun.setXPos(0);
+    this.mSun.setYPos(37.5);
+    this.mSun.setZPos(10);
+    this.mSun.setDirection([0, 0, -1]);
+    this.mSun.setNear(8);
+    this.mSun.setFar(20);
+    this.mSun.setColor([0.0, 1.0, 0.0, 1]);
+    this.mSun.setInner(0.1);
+    this.mSun.setOuter(0.2);
+    this.mSun.setIntensity(50);
+    //this.mSun.setLightType(Light.eLightType.eDirectionalLight);
+    
+    /*[20, 25, 10],         // position
+            [0, 0, -1],          // Direction 
+            [0.6, 1.0, 0.0, 1],  // some color
+            8, 20,               // near and far distances
+            0.1, 0.2,            // inner and outer cones
+            5,                   // intensity
+            1.0                  // drop off*/
+    
     this.mTreeSet = parser.parseTrees();
 
     this.mBranchSet = parser.parseBranches();
@@ -114,22 +138,23 @@ Level1.prototype.initialize = function () {
     this.mBird.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mBird);
     this.mBirdPhysicsObjects.addToSet(this.mBird);
+    this.mBird.getRenderable().addLight(this.mSun);
     
-    this.mEnemyOne = new EnemyBird(this.kBirdTexture, this.mBird, [-50, -10], [50, 50]);
+    this.mEnemyOne = new EnemyBird(this.kBirdTexture, this.mBird, [-50, -10], [40, 30]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyOne.getXform().setPosition(-50, 0);
     this.mEnemyOne.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyOne);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyOne);
     
-    this.mEnemyTwo = new EnemyBird(this.kBirdTexture, this.mBird, [50, 55], [50, 50]);
+    this.mEnemyTwo = new EnemyBird(this.kBirdTexture, this.mBird, [50, 55], [40, 40]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyTwo.getXform().setPosition(50, 55);
     this.mEnemyTwo.mSprite.setColor([1,1,1,1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyTwo);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyTwo);
     
-    this.mEnemyThree = new EnemyBird(this.kBirdTexture, this.mBird, [-45, 90], [50, 50]);
+    this.mEnemyThree = new EnemyBird(this.kBirdTexture, this.mBird, [-45, 90], [40, 40]);
     //this.mTestEnemy.setDrawRigidShape(true);
     this.mEnemyThree.getXform().setPosition(-45, 90);
     this.mEnemyThree.mSprite.setColor([1,1,1,1]);
@@ -144,7 +169,7 @@ Level1.prototype.initialize = function () {
     // Move the egg in front of the bird
     for (var i = 0; i < this.mEggSet.size(); i++) {
         gEngine.LayerManager.moveToLayerFront(gEngine.eLayer.eActors, this.mEggSet.getObjectAt(i));
-    }
+    }    
     
     this.mBackground = new TextureRenderable(this.kBackgroundSprite);
     this.mBackground.getXform().setPosition(0, 50);
@@ -160,7 +185,6 @@ Level1.prototype.draw = function () {
     this.mCamera.setupViewProjection();
     this.mBackground.draw(this.mCamera);
     gEngine.LayerManager.drawAllLayers(this.mCamera);
-    
     
     this.mMiniMap.setupViewProjection();
     gEngine.LayerManager.drawLayer(gEngine.eLayer.eBackground, this.mMiniMap);

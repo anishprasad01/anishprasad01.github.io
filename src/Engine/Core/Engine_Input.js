@@ -29,6 +29,7 @@ gEngine.Input = (function () {
     var kKeys = {
         Backspace: 8,
         Enter: 13,
+        Escape: 27,
         
         // arrows
         Left: 37,
@@ -81,6 +82,13 @@ gEngine.Input = (function () {
 
         LastKeyCode: 222
     };
+    
+    var kMods = {
+        Shift: 0,
+        Ctrl: 1,
+        Alt: 2,
+        Meta: 3
+    };
 
     /**
      * @memberOf gEngine.Input
@@ -100,7 +108,8 @@ gEngine.Input = (function () {
     var mIsKeyClicked = [];
     //Released events: whether a button is released
     var mIsKeyReleased = [];
-
+    
+    var mIsModPressed = [];
 
     // Support mouse
     var mCanvas = null;
@@ -116,10 +125,18 @@ gEngine.Input = (function () {
     var _onKeyDown = function (event) {
         mIsKeyPressed[event.keyCode === 0 ? event.key.charCodeAt(0) : event.keyCode] = true;
         mIsKeyReleased[event.keyCode === 0 ? event.key.charCodeAt(0) : event.keyCode] = false;
+        mIsModPressed[kMods.Ctrl] = event.ctrlKey;
+        mIsModPressed[kMods.Shift] = event.shiftKey;
+        mIsModPressed[kMods.Alt] = event.altKey;
+        mIsModPressed[kMods.Meta] = event.metaKey;
     };
     var _onKeyUp = function (event) {
         mIsKeyPressed[event.keyCode === 0 ? event.key.charCodeAt(0) : event.keyCode] = false;
         mIsKeyReleased[event.keyCode === 0 ? event.key.charCodeAt(0) : event.keyCode] = true;
+        mIsModPressed[kMods.Ctrl] = false;
+        mIsModPressed[kMods.Shift] = false;
+        mIsModPressed[kMods.Alt] = false;
+        mIsModPressed[kMods.Meta] = false;
     };
     //</editor-fold>
 
@@ -272,6 +289,10 @@ gEngine.Input = (function () {
         return mIsButtonReleased[button];
     };
     
+    var isModPressed = function(mod) {
+        return mIsModPressed[mod];
+    };
+    
     /**
      * Returns mouse X position.
      * @memberOf gEngine.Input
@@ -295,6 +316,10 @@ gEngine.Input = (function () {
         isKeyClicked: isKeyClicked,
         isKeyReleased: isKeyReleased,
         keys: kKeys,
+        
+        // mod keys
+        isModPressed: isModPressed,
+        mods: kMods,
 
         // Mouse support
         isButtonPressed: isButtonPressed,

@@ -14,14 +14,14 @@ BirdStateNormal.prototype.update = function() {
     if (this.mBird.mNextSmallFlap < Date.now() && this.mV[1] < -1) {
         this.mBird.mNextSmallFlap = Date.now() + this.mBird.mFlapFrequency;
         this.mV[1] = this.mWP[1] * 0.10;
-        this.mSprite.setSpriteSequence(1024, 0, 128, 128, 8, 0);
+        this.mSprite.setSpriteSequence(2048, 0, 512, 512, 8, 0);
     }
     this.mV[0] /= (1 + this.mBird.mDraft);
     BirdState.prototype.update.call(this);
 };
 
 BirdStateNormal.prototype.initialize = function() {
-    this.mSprite.setSpriteSequence(1024, 0, 128, 128, 8, 0);
+    this.mSprite.setSpriteSequence(2048, 0, 512, 512, 8, 0);
     this.mSprite.getXform().setSize(20, 20);
     this.mSprite.getXform().setRotationInDegree(0);
     this.mRigidBody.setSize(4, 10);

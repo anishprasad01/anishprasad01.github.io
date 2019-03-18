@@ -10,8 +10,9 @@ function EndLevel(finalScore, possibleScore) {
     
     this.kBackgroundMusic = "assets/Audio/FinishScreenBG.mp3";
     this.kBackgroundSprite = "assets/Backdrops/bg.png";
-    this.kButtonSprite = "assets/UI/button.png"
+    this.kButtonSprite = "assets/Backdrops/bg1.png"
     
+    this.mRestartButton = null;
     this.mMainMenuButton = null;
     
     this.mRestart = false;
@@ -35,7 +36,7 @@ EndLevel.prototype.unloadScene = function () {
     gEngine.LayerManager.cleanUp();
     
     if (this.mRestart) {
-        gEngine.Core.startScene(new Level1());
+        gEngine.Core.startScene(new BirdCreek());
     }
     else if (this.mQuitGame){
         gEngine.Core.startScene(new MainMenu());
@@ -84,7 +85,9 @@ EndLevel.prototype.initialize = function () {
     this.mThanksMessage = new UIText("Thanks for Playing!", [400, 180], 10, 1, 2, [1, 1, 1, 1]);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eHUD, this.mThanksMessage);
     
-    this.mMainMenuButton = new UIButton(this.kButtonSprite,this.goHome,this,[390,80],[290,70],"Return to Main Menu",5,[1,1,1,1],[0,0,1,1]);
+    this.mRestartButton = new UIButton(this.kButtonSprite,this.restart,this,[390,120],[270,60],"Play Again",5,[0.2,0.5,0,1],[1,1,1,1]);
+    
+    this.mMainMenuButton = new UIButton(this.kButtonSprite,this.goHome,this,[390,55],[270,60],"Return to Main Menu",5,[0.8,0,0.2,1],[1,1,1,1]);
     
     this.mBackground = new TextureRenderable(this.kBackgroundSprite);
     this.mBackground.getXform().setPosition(0, 50);
@@ -98,6 +101,7 @@ EndLevel.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     this.mBackground.draw(this.mCamera);
+    this.mRestartButton.draw(this.mCamera);
     this.mMainMenuButton.draw(this.mCamera);
     gEngine.LayerManager.drawAllLayers(this.mCamera);
 };
@@ -116,9 +120,15 @@ EndLevel.prototype.update = function () {
         gEngine.GameLoop.stop();
     }
     
+    this.mRestartButton.update();
     this.mMainMenuButton.update();
     
     gEngine.LayerManager.updateAllLayers();
+};
+
+EndLevel.prototype.restart = function () {
+    this.mRestart = true;
+    gEngine.GameLoop.stop();
 };
 
 EndLevel.prototype.goHome = function () {

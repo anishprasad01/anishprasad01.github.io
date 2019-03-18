@@ -1,20 +1,17 @@
 "use strict";
 
-function Nest(x, y, width, height, texture) {
-    this.mSprite = new SpriteRenderable(texture);
-    this.mSprite.setElementPixelPositions(0, 256, 448, 510);
+function Nest(x, y, width, height, texture, normal) {
+    if (normal !== undefined)
+        this.mSprite = new IllumRenderable(texture, normal);
+    else 
+        this.mSprite = new LightRenderable(texture);
+    this.mSprite.setElementPixelPositions(3072, 4096, 0, 256);
     GameObject.call(this, this.mSprite);
     
     // State
     this.mXPosition = x;
     this.mYPosition = y;
     this.mWidth = width;
-
-    this.mRenderable = new SpriteRenderable(texture);
-    this.mRenderable.setElementPixelPositions(0, 256, 256, 512);
-    this.mRenderable.getXform().setSize(this.mWidth, 10);
-    GameObject.call(this, this.mRenderable);
-
     this.mHeight = height;
     this.isHomeNest = false;
     

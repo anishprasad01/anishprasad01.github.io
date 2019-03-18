@@ -13,6 +13,10 @@ uniform vec4 uPixelColor;
 uniform vec4 uGlobalAmbientColor; // this is shared globally
 uniform float uGlobalAmbientIntensity; 
 
+// For flipping and rotation
+uniform bool uFlipX;
+uniform float uRotationZ;
+
 // for supporting a simple Phong-like illumination model
 uniform vec3 uCameraPosition; // for computing the V-vector
 // material properties
@@ -136,6 +140,12 @@ void main(void)  {
     vec4 textureMapColor = texture2D(uSampler, vTexCoord);
     vec4 normal = texture2D(uNormalSampler, vTexCoord);
     vec4 normalMap = (2.0 * normal) - 1.0;
+    if (uFlipX) {
+        normalMap.x = -normalMap.x;
+    }
+
+    normalMap.x = normalMap.x * cos(uRotationZ) - normalMap.y * sin(uRotationZ);
+    normalMap.y = normalMap.x * sin(uRotationZ) + normalMap.y * cos(uRotationZ);
     
     //
     // normalMap.y = -normalMap.y;  // flip Y

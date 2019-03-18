@@ -33,6 +33,7 @@ function ParallaxGameObject(renderableObj, scale, aCamera) {
     this.mRefCamera = aCamera;
     this.mCameraWCCenterRef = vec2.clone(this.mRefCamera.getWCCenter());
     this.mParallaxScale = 1;
+    this.mSpeed = 0;
     this.setParallaxScale(scale);
     TiledGameObject.call(this, renderableObj);
 }
@@ -95,3 +96,7 @@ ParallaxGameObject.prototype.setParallaxScale = function(s) {
         this.mParallaxScale = 1/s;
     }
 };
+
+ParallaxGameObject.prototype.setSpeed = function (s) { this.mSpeed = s; };
+ParallaxGameObject.prototype.getSpeed = function () { return this.mSpeed; };
+ParallaxGameObject.prototype.incSpeedBy = function (delta) { this.mSpeed += delta; };

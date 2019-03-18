@@ -37,7 +37,7 @@ BirdStateUpX.prototype._soarCheck = function() {
     this.mSprite.getXform().setRotationInDegree(-10 * this.mV[0] / this.mWP[0]);
     if (this.mXNormal * this.mV[0] >= 10) {
         this.mSpeedCheck = this._vertCheck;
-        this.mSprite.setSpriteSequence(896, 0, 128, 128, 8, 0);
+        this.mSprite.setSpriteSequence(1536, 0, 512, 512, 8, 0);
         this.mSprite.getXform().setSize(this.mXNormal * 20, 20);
         this.mSprite.getXform().setRotationInDegree(this.mXNormal * 5);
         this.mRigidBody.setSize(10, 4);
@@ -49,7 +49,7 @@ BirdStateUpX.prototype._soarCheck = function() {
 BirdStateUpX.prototype._vertCheck = function() {
     if (this.mXNormal * this.mV[0] < 10) {
         this.mSpeedCheck = this._soarCheck;
-        this.mSprite.setSpriteSequence(1024, 0, 128, 128, 8, 0);
+        this.mSprite.setSpriteSequence(2048, 0, 512, 512, 8, 0);
         this.mSprite.getXform().setRotationInDegree(this.mXNormal * -10);
         this.mSprite.getXform().setSize(20, 20);
         this.mRigidBody.setSize(4, 10);

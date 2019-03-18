@@ -135,7 +135,7 @@ SceneFileParser.prototype.parseRenderablePlatform = function() {
         p.setDrawRigidShape(d);
         p.setGround(z);
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, p);
-        gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, p);
+        //gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, p);
         
         allPlatforms.addToSet(p);
     }
@@ -143,7 +143,7 @@ SceneFileParser.prototype.parseRenderablePlatform = function() {
     return allPlatforms;
 };
 
-SceneFileParser.prototype.parseNests = function(texture) {
+SceneFileParser.prototype.parseNests = function(texture, normal) {
     var elm = this._getElm("Nest");
     var i, x, y, w, h, d, p, c, b;
     var allNests = new GameObjectSet();
@@ -172,15 +172,10 @@ SceneFileParser.prototype.parseNests = function(texture) {
         if(b){
             colArray = [0, 0.5, 0,1];
         }
-        
-        //enforce min nest size of 30
-        if(w < 30){
-            w = 30;
-        }
 
-        p = new Nest(x, y, w, h, texture);
-        p.setColor(colArray);
-        p.setDrawRigidShape(d);
+        p = new Nest(x, y, w, h, texture, normal);
+//        p.setColor(colArray);
+//        p.setDrawRigidShape(d);
         p.setHomeNest(b);
         
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, p);
@@ -235,7 +230,7 @@ SceneFileParser.prototype.parseBranches = function() {
 };
 
 
-SceneFileParser.prototype.parseEggs = function(texture) {
+SceneFileParser.prototype.parseEggs = function(texture, normal) {
     var elm = this._getElm("Egg");
     var i, x, y, egg, icon;
     var allEggs = new GameObjectSet();
@@ -243,12 +238,12 @@ SceneFileParser.prototype.parseEggs = function(texture) {
         x = Number(elm.item(i).attributes.getNamedItem("PosX").value);
         y = Number(elm.item(i).attributes.getNamedItem("PosY").value);
 
-        egg = new Egg(texture);
+        egg = new Egg(texture, normal);
         egg.getXform().setPosition(x, y);
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, egg);
         
         icon = new MiniIcon(texture, egg.getXform());
-        SpriteRenderable.prototype.setElementPixelPositions.call(icon, 0, 64, 512, 576);
+        SpriteRenderable.prototype.setElementPixelPositions.call(icon, 0, 256, 0, 256);
         SpriteRenderable.prototype.getXform.call(icon).setSize(10, 10);
         gEngine.LayerManager.addToLayer(gEngine.eLayer.eMiniMap, icon);
         

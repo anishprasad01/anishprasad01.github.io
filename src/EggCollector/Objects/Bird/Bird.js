@@ -1,12 +1,16 @@
 "use strict";
 
-function Bird(texture, platforms, eggs) {
+function Bird(texture, platforms, eggs, normal) {
     // World stuff
     this.mPlatforms = platforms;
     this.mEggs = eggs;
     
     // Sprite Stuff
-    this.mSprite = new SpriteAnimateRenderable(texture);
+    if (normal !== undefined) {
+        this.mSprite = new IllumRenderable(texture, normal);
+    } else {
+        this.mSprite = new LightRenderable(texture);
+    }
     this.mSprite.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
     this.mSprite.setAnimationSpeed(60 / 8);
     this.mSprite.getXform().setSize(20, 20);
@@ -49,6 +53,16 @@ function Bird(texture, platforms, eggs) {
     
     this.mState = this.mStates[this.mInput];
     this.mState.initialize();
+    
+    this.mShake = null;
+    this.mOscillationCenter = null;
+    //shake scaling, i.e what percentage of the original object's size the shake should be
+    this.mShakeScalar = 0.1;
+    this.mShakeAmplitude = [this.mSprite.getXform().getWidth() * this.mShakeScalar, this.mSprite.getXform().getHeight() * this.mShakeScalar];
+    //shake frequency
+    this.mShakeFrequency = 4;
+    //shake duration
+    this.mShakeDuration = 60;
 }
 gEngine.Core.inheritPrototype(Bird, GameObject);
 
@@ -122,8 +136,36 @@ Bird.prototype.update = function() {
     
     this.mPrevInput = this.mInput;
     this.mInput = 0;
+    
+    if (this.mShake !== null) { 
+        if(this.mShake.shakeDone()){
+            //clear shake
+            this.mShake = null;
+        }
+        else {
+            this.shake();
+        }
+    }
 };
 
 Bird.prototype.getBBox = function() {
     return this.mState.getBBox();
+};
+
+Bird.prototype.newShake = function () {
+    //if null, create new shakeposition
+    if(this.mShake === null){
+        this.mShake = new ShakePosition(this.mShakeAmplitude[0], this.mShakeAmplitude[1], this.mShakeFrequency, this.mShakeDuration);
+        //get current position
+        this.mOscillationCenter = [this.mSprite.getXform().getXPos(), this.mSprite.getXform().getYPos()];
+    }
+};
+
+Bird.prototype.shake = function () {
+    if (this.mShake !== null) {
+        //calculate shake
+        var shakeResults = this.mShake.getShakeResults();
+        //perform shake
+        this.mSprite.getXform().setPosition(this.mOscillationCenter[0] + shakeResults[0], this.mOscillationCenter[1] + shakeResults[1]);
+    }
 };

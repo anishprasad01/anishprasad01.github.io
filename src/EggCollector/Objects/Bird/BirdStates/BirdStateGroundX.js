@@ -38,7 +38,7 @@ BirdStateGroundX.prototype.update = function() {
 };
 
 BirdStateGroundX.prototype.initialize = function() {
-    this.mSprite.setSpriteSequence(768, 630, 128, 128, 3, 0);
+    this.mSprite.setSpriteSequence(1024, 2520, 512, 512, 3, 0);
     this.mSprite.getXform().setSize(this.mXNormal * 20, 20);
     this.mSprite.getXform().setRotationInDegree(0);
     this.mRigidBody.setSize(4, 10);

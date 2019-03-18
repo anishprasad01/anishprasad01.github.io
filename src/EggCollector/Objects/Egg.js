@@ -1,11 +1,13 @@
 "use strict";
 
-function Egg(texture) {
+function Egg(texture, normal) {
     // Sprite Stuff
-    this.mSprite = new SpriteRenderable(texture);
+    if (normal !== undefined)
+        this.mSprite = new IllumRenderable(texture, normal);
+    else 
+        this.mSprite = new LightRenderable(texture);
     this.mSprite.getXform().setSize(5, 5);
-    this.mSprite.setElementPixelPositions(0, 64, 512, 576);
-    this.mSprite.setColor([1,1,1,1]);
+    this.mSprite.setElementPixelPositions(0, 256, 0, 256);
     GameObject.call(this, this.mSprite);
     
     // Physics stuff

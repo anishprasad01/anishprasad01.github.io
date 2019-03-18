@@ -86,7 +86,7 @@ gEngine.DefaultResources = (function () {
     var mParticleShader = null;
 
     // Default font
-    var kDefaultFont = "assets/fonts/system-default-font";
+    var kDefaultFont = "assets/fonts/bird-font";
     
     // UI
     var UIRadarButtonTexture = "assets/UI/radarbutton.png";

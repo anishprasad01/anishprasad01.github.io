@@ -20,7 +20,7 @@ BirdStateDown.prototype.initialize = function() {
     if (this.mV[1] > -this.mWP[1]) {
         this.mV[1] = -this.mWP[1];
     }
-    this.mSprite.setSpriteSequence(768, 0, 128, 128, 1, 0);
+    this.mSprite.setSpriteSequence(1024, 0, 512, 512, 1, 0);
     this.mSprite.getXform().setSize(20, 20);
     this.mSprite.getXform().setRotationInDegree(0);
     this.mRigidBody.setSize(4, 10);

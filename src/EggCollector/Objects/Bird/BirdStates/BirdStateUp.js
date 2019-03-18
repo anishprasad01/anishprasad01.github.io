@@ -18,7 +18,7 @@ BirdStateUp.prototype.update = function() {
 };
 
 BirdStateUp.prototype.initialize = function() {
-    this.mSprite.setSpriteSequence(1024, 0, 128, 128, 8, 0);
+    this.mSprite.setSpriteSequence(2048, 0, 512, 512, 8, 0);
     this.mSprite.getXform().setSize(20, 20);
     this.mSprite.getXform().setRotationInDegree(0);
     this.mRigidBody.setSize(4, 10);

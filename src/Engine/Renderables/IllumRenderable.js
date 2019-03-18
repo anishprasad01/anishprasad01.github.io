@@ -46,6 +46,7 @@ gEngine.Core.inheritPrototype(IllumRenderable, LightRenderable);
  */
 IllumRenderable.prototype.draw = function (aCamera) {
     gEngine.Textures.activateNormalMap(this.mNormalMap);
+    this.mShader.adjustNormalMapToTransform(this.mXform);
             // Here thenormal map texture coordinate is copied from those of 
             // the corresponding sprite sheet
     this.mShader.setMaterialAndCameraPos(this.mMaterial, aCamera.getPosInPixelSpace());

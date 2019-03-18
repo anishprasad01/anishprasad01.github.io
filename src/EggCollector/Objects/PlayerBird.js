@@ -1,7 +1,7 @@
 "use strict";
 
-function PlayerBird(texture, platforms, eggs) {
-   Bird.call(this, texture, platforms, eggs);
+function PlayerBird(texture, platforms, eggs, normal) {
+   Bird.call(this, texture, platforms, eggs, normal);
    
    this.cCantGrabTime = 1000;
    this.mWasAttacked = false;
