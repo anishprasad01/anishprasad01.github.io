@@ -12,6 +12,10 @@ function BirdCreek() {
     this.kEggGrabSound = "assets/Audio/drop.mp3";
     this.kEggReleaseSound = "assets/Audio/drop.mp3";
     this.kEggHomeSound = "assets/Audio/whistle.mp3";
+    
+    this.cStartingSunAngle = 135;
+    this.cMaxSunAngle = 225;
+    
     this.mUITitle = null;
     this.mUIScore = null;
     this.mUIRemainder = null;
@@ -45,6 +49,9 @@ function BirdCreek() {
     this.mRemainingEggs = 0;
     this.mHomeNest = null;
     this.mGround = null;
+    
+    this.mSunFluctuation = 5;
+    this.mSunRange = this.cStartingSunAngle;
 }
 gEngine.Core.inheritPrototype(BirdCreek, Scene);
 
@@ -207,7 +214,7 @@ BirdCreek.prototype.initialize = function () {
     this.mEnemyBirdTwo.getRenderable().addLight(this.mForestSun);
     this.mEnemyBirdTwo.getRenderable().addLight(this.mSunset);
     
-    this.mEnemyBirdThree = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-340, -30], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
+    this.mEnemyBirdThree = new EnemyBird(this.kBirdTexture, this.kBirdNormal, this.mBird, [-340, -25], [40, 40], this.kBirdFeatherTexture, this.mAllParticles);
     gEngine.LayerManager.addToLayer(gEngine.eLayer.eActors, this.mEnemyBirdThree);
     this.mBirdPhysicsObjects.addToSet(this.mEnemyBirdThree);
     this.mEnemyBirdThree.getRenderable().addLight(this.mForestSun);
@@ -350,6 +357,17 @@ BirdCreek.prototype.update = function () {
         this.mCamera.panTo(x, y);
         this.mCamera.update();
     }
+    
+    this.mSunRange += this.mSunFluctuation * gEngine.GameLoop.getUpdateIntervalInSeconds();
+    if (this.mSunRange > this.cMaxSunAngle || this.mSunRange < this.cStartingSunAngle) {
+        this.mSunFluctuation *= -1;
+    }
+    
+    this.mSunset.setInner(this.degreesToRadians(this.mSunRange));
+    this.mSunset.setOuter(this.degreesToRadians(this.mSunRange));
+    
+    this.mForestSun.setInner(this.degreesToRadians(this.cFullCircle - this.mSunRange));
+    this.mForestSun.setOuter(this.degreesToRadians(this.cFullCircle - this.mSunRange));
 };
 
 BirdCreek.prototype._generateHearts = function(hearts) {
@@ -371,4 +389,8 @@ BirdCreek.prototype._generateHearts = function(hearts) {
         
         this.mAllParticles.addToSet(p);
     }
+};
+
+BirdCreek.prototype.degreesToRadians = function(degrees) {
+    return degrees * Math.PI / 180;
 };

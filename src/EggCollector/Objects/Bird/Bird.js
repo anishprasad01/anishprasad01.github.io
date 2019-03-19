@@ -112,9 +112,9 @@ Bird.prototype.grab = function() {
             this.mItem = this.mEggs.getObjectAt(i);
             this.mItem.setPhysicsEnabled(false);
             this.mItem.getXform().setRotationInDegree(0);
-            if (this.mGrabSound !== null) {
-                gEngine.AudioClips.playACue(this.mGrabSound);
-            }
+//            if (this.mGrabSound !== null) {
+//                gEngine.AudioClips.playACue(this.mGrabSound);
+//            }
             return;
         }
     }
